@@ -25,7 +25,7 @@ class GeminiClient:
         self.model = None
         self.is_initialized = False
         self.executor = ThreadPoolExecutor(max_workers=3)  # Limit concurrent requests
-        self.timeout = 10  # 10 seconds timeout
+        self.timeout = 30  # 10 seconds timeout
         
         if self.api_key:
             self._initialize_gemini()
@@ -36,7 +36,7 @@ class GeminiClient:
         """Initialize Gemini AI with API key"""
         try:
             genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
             self.is_initialized = True
             logger.info("✅ Gemini AI initialized successfully")
         except Exception as e:
