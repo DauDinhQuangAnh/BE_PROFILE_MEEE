@@ -29,24 +29,11 @@ class TextProcessor:
         self.embedding_model = None
         
     def load_embedding_model(self, language="VIETNAMESE"):
-        """Load the Vietnamese embedding model"""
+        """Load the Vietnamese embedding model (online only)"""
         try:
-            # Get the absolute path to the embedding model
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            model_path = os.path.join(current_dir, "embedding_model")
-            
-            logger.info(f"🔍 Looking for embedding model at: {model_path}")
-            
-            if os.path.exists(model_path):
-                self.embedding_model = SentenceTransformer(model_path)
-                logger.info("✅ Vietnamese embedding model loaded successfully from local path")
-                return True
-            else:
-                # Fallback to online model
-                logger.warning(f"⚠️ Local model not found at {model_path}, using online model")
-                self.embedding_model = SentenceTransformer('keepitreal/vietnamese-sbert')
-                logger.info("✅ Online Vietnamese embedding model loaded successfully")
-                return True
+            self.embedding_model = SentenceTransformer('keepitreal/vietnamese-sbert')
+            logger.info("✅ Online Vietnamese embedding model loaded successfully")
+            return True
         except Exception as e:
             logger.error(f"❌ Failed to load embedding model: {e}")
             return False
