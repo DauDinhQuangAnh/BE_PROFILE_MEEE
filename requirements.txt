@@ -1,14 +1,8 @@
 flask
-streamlit
 supabase
 python-dotenv
 flask-cors
 requests
-pandas
-openpyxl
-xlrd
-nltk
-scikit-learn
 sentence-transformers
 torch
 google-generativeai

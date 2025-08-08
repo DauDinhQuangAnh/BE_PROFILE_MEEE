@@ -7,9 +7,6 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 import ast
 
-# Add parent directory to path to import modules
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from config import Config
 from database.supabase_client import supabase_manager
 from database.vector_search import vector_optimizer

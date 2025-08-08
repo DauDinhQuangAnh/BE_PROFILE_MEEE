@@ -67,8 +67,11 @@ class SupabaseManager:
                 
                 # Parse additional field for link only
                 link = ""
-                if additional and additional.startswith('link: '):
-                    link = additional.replace('link: ', '')
+                if isinstance(additional, str):
+                    if additional.startswith('link:'):
+                        # Support both 'link:<url>' and legacy 'link: <url>' formats
+                        link = additional.replace('link: ', '').replace('link:', '', 1)
+                        link = link.strip()
                 
                 transformed_data.append({
                     'id': item.get('id'),
