@@ -125,26 +125,6 @@ def process_document():
             'error': 'Internal server error'
         }), 500
 
-@app.route('/api/chat/history', methods=['GET'])
-def get_document_chunks():
-    """Get document chunks from Supabase"""
-    try:
-        source_name = request.args.get('user_id', None)
-        limit = int(request.args.get('limit', 50))
-        
-        chunks = supabase_manager.get_chat_history(limit, source_name)
-        
-        return jsonify({
-            'chunks': chunks,
-            'count': len(chunks)
-        }), 200
-        
-    except Exception as e:
-        logger.error(f"Error getting document chunks: {e}")
-        return jsonify({
-            'error': 'Failed to retrieve document chunks'
-        }), 500
-
 @app.route('/api/query', methods=['POST'])
 def process_query():
     """Process user query and find relevant documents"""
@@ -261,74 +241,6 @@ def process_query():
         logger.error(f"Error in query processing endpoint: {e}")
         return jsonify({
             'error': 'Internal server error'
-        }), 500
-
-@app.route('/api/test-connection', methods=['GET'])
-def test_supabase_connection():
-    """Test Supabase connection"""
-    try:
-        is_connected = supabase_manager.test_connection()
-        
-        if is_connected:
-            return jsonify({
-                'status': 'connected',
-                'message': 'Successfully connected to Supabase'
-            }), 200
-        else:
-            return jsonify({
-                'status': 'disconnected',
-                'message': 'Failed to connect to Supabase'
-            }), 500
-            
-    except Exception as e:
-        logger.error(f"Error testing Supabase connection: {e}")
-        return jsonify({
-            'status': 'error',
-            'message': f'Error testing connection: {str(e)}'
-        }), 500
-
-@app.route('/api/test-gemini', methods=['POST'])
-def test_gemini():
-    """Test Gemini AI functionality"""
-    try:
-        data = request.get_json()
-        
-        if not data or 'prompt' not in data:
-            return jsonify({
-                'error': 'Missing prompt in request body'
-            }), 400
-        
-        prompt = data['prompt']
-        
-        if not gemini_client.is_available():
-            return jsonify({
-                'error': 'Gemini AI not available. Please check your API key.',
-                'ai_status': 'unavailable'
-            }), 503
-        
-        # Generate response
-        ai_response = gemini_client.generate_response(prompt)
-        
-        if ai_response['success']:
-            return jsonify({
-                'success': True,
-                'prompt': prompt,
-                'response': ai_response['response'],
-                'ai_status': 'success'
-            }), 200
-        else:
-            return jsonify({
-                'success': False,
-                'prompt': prompt,
-                'error': ai_response['error'],
-                'ai_status': 'failed'
-            }), 500
-            
-    except Exception as e:
-        logger.error(f"Error testing Gemini: {e}")
-        return jsonify({
-            'error': 'Internal server error',
-            'ai_status': 'error'
         }), 500
 
 if __name__ == '__main__':
